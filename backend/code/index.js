@@ -13,8 +13,9 @@ app.get("/", (req, res) => {
     })
 });
 
-app.get("/expenses", (req, res) => {
-    res.sendFile(expensesFilePath);
+app.get("/expenses", async (req, res) => {
+    const expenses = JSON.parse(await fs.readFile(expensesFilePath, "utf-8"));
+    res.json(expenses);
 });
 
 app.get("/expenses/:id", async (req, res) => {
