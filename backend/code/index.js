@@ -27,8 +27,10 @@ app.get("/expenses/:id", async (req, res) => {
 
 app.post("/expenses", async (req, res) => {
     const expenses = JSON.parse(await fs.readFile(expensesFilePath, "utf-8"));
-    const newExpense = req.body;
-    newExpense.id = expenses.at(-1).id + 1;
+    const newExpense = {
+        ...req.body,
+        "id": expenses.at(-1).id + 1
+    }
     expenses.push(newExpense);
     await fs.writeFile(expensesFilePath, JSON.stringify(expenses, null, 2));
     res.json({
