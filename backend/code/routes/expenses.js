@@ -1,32 +1,22 @@
 const express = require("express");
-const path = require("path");
 const router = express.Router();
-const { extractJsonFile, saveJsonFile } = require("../utils/utilities");
-const expensesFilePath = path.join(__dirname, "../../files/expenses.json")
+const { getAllExpenses, getExpense, insertExpense } = require("../database/db")
 
 router.get("/", async (req, res) => {
-    const expenses = await extractJsonFile(expensesFilePath);
+    const expenses = await getAllExpenses();
     res.json(expenses);
 });
 
 router.get("/:id", async (req, res) => {
-    const targetId = Number(req.params.id);
-    const expenses = await extractJsonFile(expensesFilePath);
-    const expense = expenses.find(item => item.id === targetId);
+    const expense = await getExpense(req.params.id);
     res.json(expense);
 });
 
 router.post("/", async (req, res) => {
-    const expenses = await extractJsonFile(expensesFilePath);
-    const newExpense = {
-        ...req.body,
-        "id": expenses.at(-1).id + 1
-    }
-    expenses.push(newExpense);
-    await saveJsonFile(expensesFilePath, expenses);
+    const expense = await insertExpense(req.body);
     res.json({
         "message": "Expense created successfully!",
-        "expense": newExpense
+        "expense": expense
     })
 });
 
