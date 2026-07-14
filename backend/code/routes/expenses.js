@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getAllExpenses, getExpense, insertExpense } = require("../database/db")
+const { getAllExpenses, getExpense, insertExpense, updateExpense } = require("../database/db")
 
 router.get("/", async (req, res) => {
     const expenses = await getAllExpenses();
@@ -19,5 +19,14 @@ router.post("/", async (req, res) => {
         "expense": expense
     })
 });
+
+router.put("/:id", async (req, res) => {
+    const expense = await updateExpense(req.params.id, req.body);
+    console.log(expense);
+    res.json({
+        "message": "Expense updated successfully!",
+        "expense": expense
+    })
+})
 
 module.exports = router;
