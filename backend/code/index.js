@@ -1,9 +1,12 @@
 require('dotenv').config()
 const express = require("express");
+const { requestLogger, responseTimeLogger } = require('./middleware/middleware');
 const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
+
+app.use(requestLogger, responseTimeLogger);
 
 app.get("/", (req, res) => {
     res.status(200).json({
