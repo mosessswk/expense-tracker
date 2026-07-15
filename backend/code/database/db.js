@@ -5,30 +5,40 @@ const pool = new Pool({
     database: "expense_tracker"
 });
 
-async function testDatabase() {
-    const result = await pool.query("SELECT NOW()");
-    console.log(result.rows);
-}
-
-// testDatabase();
-
 async function getAllExpenses() {
-    const result = await pool.query("SELECT * FROM expenses ORDER BY id");
+    const query = "SELECT * FROM expenses ORDER BY id";
+    const result = await pool.query(query);
     return result.rows;
 }
 
 async function getExpense(id) {
-    const result = await pool.query("SELECT * FROM expenses WHERE id = $1", [id]);
+    const query = "SELECT * FROM expenses WHERE id = $1";
+    const values = [id];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+        const err = new Error("Expense non found");
+        err.status = 404;
+        throw err;
+    }
     return result.rows[0];
 }
 
 async function insertExpense(expense) {
-    const result = await pool.query("INSERT INTO expenses (title, amount, category, date, description) VALUES ($1, $2, $3, $4, $5) RETURNING *", [expense.title, expense.amount, expense.category, expense.date, expense.description]);
+    const query = "INSERT INTO expenses (title, amount, category, date, description) VALUES ($1, $2, $3, $4, $5) RETURNING *";
+    const values = [expense.title, expense.amount, expense.category, expense.date, expense.description];
+    const result = await pool.query(query, values);
     return result.rows[0];
 }
 
 async function updateExpense(id, expense) {
-    const result = await pool.query("UPDATE expenses SET title = $2, amount = $3, category = $4, date = $5, description = $6 WHERE id = $1 RETURNING *", [id, expense.title, expense.amount, expense.category, expense.date, expense.description]);
+    const query = "UPDATE expenses SET title = $2, amount = $3, category = $4, date = $5, description = $6 WHERE id = $1 RETURNING *";
+    const values = [id, expense.title, expense.amount, expense.category, expense.date, expense.description];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+        const err = new Error("Expense non found");
+        err.status = 404;
+        throw err;
+    }
     return result.rows[0];
 }
 

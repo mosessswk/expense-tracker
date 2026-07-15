@@ -5,8 +5,8 @@ const port = 3000;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.json({
-        "message":"Expense Tracker Backend Running"
+    res.status(200).json({
+        message:"Expense Tracker Backend Running"
     })
 });
 
