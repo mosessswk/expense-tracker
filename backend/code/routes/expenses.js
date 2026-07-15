@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getAllExpenses, getExpense, insertExpense, updateExpense } = require("../database/db");
+const { getAllExpenses, getExpense, insertExpense, updateExpense, deleteExpense } = require("../database/db");
 const { isPositiveInt } = require("../utils/utils");
 
 router.get("/", async (req, res) => {
@@ -16,12 +16,12 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
     if (!isPositiveInt(req.params.id)) {
         return res.status(400).json({
             error: "ID invalid"
         });
     }
+    const id = Number(req.params.id);
     try {
         const expense = await getExpense(id);
         res.status(200).json(expense);
@@ -70,14 +70,14 @@ router.put("/:id", async (req, res) => {
             error: "ID invalid"
         });
     }
-    const id = parseInt(req.params.id);
+    const id = Number(req.params.id);
     if (id !== req.body.id) {
         return res.status(400).json({
             error: "ID in URL and request body do not match"
         });
     }
     try {
-        const expense = await updateExpense(req.params.id, req.body);
+        const expense = await updateExpense(id, req.body);
         res.status(200).json({
             message: "Expense updated successfully!",
             expense: expense
@@ -95,6 +95,30 @@ router.put("/:id", async (req, res) => {
         }
     }
     
+})
+
+router.delete("/:id", async (req, res) => {
+    if (!isPositiveInt(req.params.id)) {
+        return res.status(400).json({
+            error: "ID invalid"
+        });
+    }
+    const id = Number(req.params.id);
+    try {
+        await deleteExpense(id);
+        res.status(204).end();
+    } catch (err) {
+        if (err.status === 404) {
+            res.status(404).json({
+                error: "Expense not found"
+            });
+        } else {
+            console.error(err);
+            res.status(500).json({
+                error: "Internal server error"
+            });
+        }
+    }
 })
 
 module.exports = router;

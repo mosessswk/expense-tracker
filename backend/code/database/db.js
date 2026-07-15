@@ -35,16 +35,29 @@ async function updateExpense(id, expense) {
     const values = [id, expense.title, expense.amount, expense.category, expense.date, expense.description];
     const result = await pool.query(query, values);
     if (result.rowCount === 0) {
-        const err = new Error("Expense non found");
+        const err = new Error("Expense not found");
         err.status = 404;
         throw err;
     }
     return result.rows[0];
 }
 
+async function deleteExpense(id) {
+    const query = "DELETE FROM expenses WHERE id = $1";
+    const values = [id];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+        const err = new Error("Expense not found");
+        err.status = 404;
+        throw err;
+    }
+    return;
+}
+
 module.exports = {
     getAllExpenses,
     getExpense,
     insertExpense,
-    updateExpense
+    updateExpense,
+    deleteExpense
 }
