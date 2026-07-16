@@ -9,8 +9,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", validateId, async (req, res) => {
-    const id = Number(req.params.id);
-    const expense = await getExpense(id);
+    const expense = await getExpense(req.params.id);
     res.status(200).json(expense);
 });
 
@@ -33,13 +32,12 @@ router.put("/:id", validateId, async (req, res) => {
             error: "Expense information incomplete"
         });
     }
-    const id = Number(req.params.id);
-    if (id !== req.body.id) {
+    if (req.params.id !== req.body.id) {
         return res.status(400).json({
             error: "ID in URL and request body do not match"
         });
     }
-    const expense = await updateExpense(id, req.body);
+    const expense = await updateExpense(req.params.id, req.body);
     res.status(200).json({
         message: "Expense updated successfully!",
         expense: expense
@@ -47,8 +45,7 @@ router.put("/:id", validateId, async (req, res) => {
 })
 
 router.delete("/:id", validateId, async (req, res) => {
-    const id = Number(req.params.id);
-    await deleteExpense(id);
+    await deleteExpense(req.params.id);
     res.status(204).end();
 })
 

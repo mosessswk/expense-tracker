@@ -20,6 +20,7 @@ function validateId(req, res, next) {
             error: "ID invalid"
         });
     }
+    req.params.id = Number(req.params.id);
     next();
 }
 
