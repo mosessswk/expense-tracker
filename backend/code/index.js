@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require("express");
-const { requestLogger, responseTimeLogger } = require('./middleware/middleware');
+const { requestLogger, responseTimeLogger, errorHandler } = require('./middleware/middleware');
 const app = express();
 const port = process.env.PORT;
 
@@ -15,6 +15,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/expenses", require("./routes/expenses"));
+
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
