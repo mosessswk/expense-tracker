@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { getAllExpenses, getExpense, insertExpense, updateExpense, deleteExpense } = require("../database/db");
-const { isPositiveInt } = require("../utils/utils");
+const { validateId } = require("../middleware/middleware");
 
 router.get("/", async (req, res) => {
     try {
@@ -15,12 +15,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
-    if (!isPositiveInt(req.params.id)) {
-        return res.status(400).json({
-            error: "ID invalid"
-        });
-    }
+router.get("/:id", validateId, async (req, res) => {
     const id = Number(req.params.id);
     try {
         const expense = await getExpense(id);
@@ -59,15 +54,10 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateId, async (req, res) => {
     if (req.body.id === undefined || req.body.title === undefined || req.body.amount === undefined || req.body.category === undefined || req.body.date === undefined) {
         return res.status(400).json({
             error: "Expense information incomplete"
-        });
-    }
-    if (!isPositiveInt(req.params.id)) {
-        return res.status(400).json({
-            error: "ID invalid"
         });
     }
     const id = Number(req.params.id);
@@ -97,12 +87,7 @@ router.put("/:id", async (req, res) => {
     
 })
 
-router.delete("/:id", async (req, res) => {
-    if (!isPositiveInt(req.params.id)) {
-        return res.status(400).json({
-            error: "ID invalid"
-        });
-    }
+router.delete("/:id", validateId, async (req, res) => {
     const id = Number(req.params.id);
     try {
         await deleteExpense(id);

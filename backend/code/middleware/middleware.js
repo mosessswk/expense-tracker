@@ -1,4 +1,4 @@
-const express = require("express");
+const { isPositiveInt } = require("../utils/utils");
 
 function requestLogger(req, res, next) {
     console.log(new Date().toISOString(), req.method, req.originalUrl);
@@ -14,7 +14,17 @@ function responseTimeLogger(req, res, next) {
     next();
 }
 
+function validateId(req, res, next) {
+    if (!isPositiveInt(req.params.id)) {
+        return res.status(400).json({
+            error: "ID invalid"
+        });
+    }
+    next();
+}
+
 module.exports = {
     requestLogger,
-    responseTimeLogger
+    responseTimeLogger,
+    validateId
 }
