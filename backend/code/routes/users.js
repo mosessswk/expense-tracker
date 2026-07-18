@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { insertUser, getUserById } = require("../database/db");
-const { validateId, validateCreateUser } = require("../middleware/middleware");
+const { validateId, validateCreateUser, hashPassword } = require("../middleware/middleware");
 
 router.post("/", 
     validateCreateUser, 
+    hashPassword, 
     async (req, res) => {
         const user = await insertUser(req.body);
         res.status(201).json({

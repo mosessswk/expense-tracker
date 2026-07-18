@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const { isPositiveInt, isNonEmptyString, isAmount, isDate } = require("../utils/utils");
 
 function requestLogger(req, res, next) {
@@ -69,23 +70,30 @@ function validateUpdateExpense(req, res, next) {
 
 function validateUser(user) {
     if (!isNonEmptyString(user.username)) return {error: "Username invalid"};
-    if (!isNonEmptyString(user.password_hash)) return {error: "Password invalid"};
+    if (!isNonEmptyString(user.password)) return {error: "Password invalid"};
     if (user?.display_name !== undefined && typeof user.display_name !== "string") return {error: "Display name invalid"};
 
     return {
         username: user.username.trim(),
-        password_hash: user.password_hash.trim(),
+        password: user.password,
         display_name: user.display_name?.trim().length ? user.display_name.trim() : null
     };
 }
 
-function validateCreateUser(req, res, next) {
+ function validateCreateUser(req, res, next) {
     req.body = validateUser(req.body);
     if (req.body.error) {
         return res.status(400).json({
             error: req.body.error
         });
     }
+    next();
+}
+
+async function hashPassword(req, res, next) {
+    const saltRounds = 10;
+    req.body.password_hash = await bcrypt.hash(req.body.password, saltRounds);
+    delete req.body.password;
     next();
 }
 
@@ -108,5 +116,6 @@ module.exports = {
     validateCreateExpense,
     validateUpdateExpense,
     validateCreateUser, 
+    hashPassword, 
     errorHandler
 }
