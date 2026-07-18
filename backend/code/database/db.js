@@ -54,10 +54,44 @@ async function deleteExpense(id) {
     return;
 }
 
+async function insertUser(user) {
+    const query = "INSERT INTO users (username, password_hash, display_name) VALUES ($1, $2, $3) RETURNING id, username, display_name";
+    const values = [user.username, user.password_hash, user.display_name];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+}
+
+async function getUserById(id) {
+    const query = "SELECT id, username, display_name FROM users WHERE id = $1";
+    const values = [id];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+        const err = new Error("User not found");
+        err.status = 404;
+        throw err;
+    }
+    return result.rows[0];
+}
+
+async function getUserByUsername(username) {
+    const query = "SELECT id, username, display_name FROM users WHERE username = $1";
+    const values = [username];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+        const err = new Error("User not found");
+        err.status = 404;
+        throw err;
+    }
+    return result.rows[0];
+}
+
 module.exports = {
     getAllExpenses,
     getExpense,
     insertExpense,
     updateExpense,
-    deleteExpense
+    deleteExpense, 
+    insertUser, 
+    getUserById,
+    getUserByUsername
 }

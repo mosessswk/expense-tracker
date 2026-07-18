@@ -36,14 +36,14 @@ function validateExpense(expense) {
         amount: Number(expense.amount),
         category: expense.category.trim(),
         date: expense.date,
-        description: expense.description.trim().length ? expense.description.trim() : null
+        description: expense.description?.trim().length ? expense.description.trim() : null
     };
 }
 
 function validateCreateExpense(req, res, next) {
     req.body = validateExpense(req.body);
     if (req.body.error) {
-        res.status(400).json({
+        return res.status(400).json({
             error: req.body.error
         })
     }
@@ -59,6 +59,28 @@ function validateUpdateExpense(req, res, next) {
     }
     req.body = validateExpense(req.body);
     req.body.id = Number(req.params.id);
+    if (req.body.error) {
+        return res.status(400).json({
+            error: req.body.error
+        });
+    }
+    next();
+}
+
+function validateUser(user) {
+    if (!isNonEmptyString(user.username)) return {error: "Username invalid"};
+    if (!isNonEmptyString(user.password_hash)) return {error: "Password invalid"};
+    if (user?.display_name !== undefined && typeof user.display_name !== "string") return {error: "Display name invalid"};
+
+    return {
+        username: user.username.trim(),
+        password_hash: user.password_hash.trim(),
+        display_name: user.display_name?.trim().length ? user.display_name.trim() : null
+    };
+}
+
+function validateCreateUser(req, res, next) {
+    req.body = validateUser(req.body);
     if (req.body.error) {
         return res.status(400).json({
             error: req.body.error
@@ -85,5 +107,6 @@ module.exports = {
     validateId,
     validateCreateExpense,
     validateUpdateExpense,
+    validateCreateUser, 
     errorHandler
 }

@@ -16,6 +16,8 @@ app.get("/", (req, res) => {
 
 app.use("/expenses", require("./routes/expenses"));
 
+app.use("/users", require("./routes/users"));
+
 app.use(errorHandler);
 
 app.listen(port, () => {
