@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { isPositiveInt, isNonEmptyString, isAmount, isDate } = require("../utils/utils");
+const { getUserForAuthentication } = require("../database/db");
 
 function requestLogger(req, res, next) {
     console.log(new Date().toISOString(), req.method, req.originalUrl);
@@ -97,6 +98,28 @@ async function hashPassword(req, res, next) {
     next();
 }
 
+async function validateLogin(req, res, next) {
+    if (!isNonEmptyString(req.body.username) || !isNonEmptyString(req.body.password)) {
+        return res.status(401).json({
+            error: "Username or password invalid"
+        })
+    }
+    next();
+}
+
+async function authenticateUser(req, res, next) {
+    const user = await getUserForAuthentication(req.body.username);
+    const authorised = await bcrypt.compare(req.body.password, user.password_hash);
+    delete user.password_hash;
+    if (!authorised) {
+        return res.status(401).json({
+            error: "Username or password invalid"
+        })
+    }
+    req.user = user;
+    next();
+}
+
 function errorHandler(err, req, res, next) {
     const status = err.status ?? 500;
     let message = err.message;
@@ -117,5 +140,7 @@ module.exports = {
     validateUpdateExpense,
     validateCreateUser, 
     hashPassword, 
+    validateLogin, 
+    authenticateUser, 
     errorHandler
 }

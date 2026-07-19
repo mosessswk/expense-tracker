@@ -85,6 +85,18 @@ async function getUserByUsername(username) {
     return result.rows[0];
 }
 
+async function getUserForAuthentication(username) {
+    const query = "SELECT * FROM users WHERE username = $1";
+    const values = [username];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+        const err = new Error("Username or password invalid");
+        err.status = 401;
+        throw err;
+    }
+    return result.rows[0];
+}
+
 module.exports = {
     getAllExpenses,
     getExpense,
@@ -93,5 +105,6 @@ module.exports = {
     deleteExpense, 
     insertUser, 
     getUserById,
-    getUserByUsername
+    getUserByUsername, 
+    getUserForAuthentication
 }
