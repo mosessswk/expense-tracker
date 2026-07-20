@@ -5,15 +5,16 @@ const pool = new Pool({
     database: process.env.DB_NAME
 });
 
-async function getAllExpenses() {
-    const query = "SELECT * FROM expenses ORDER BY id";
-    const result = await pool.query(query);
+async function getAllExpenses(ownerId) {
+    const query = "SELECT * FROM expenses WHERE owner_id = $1 ORDER BY id";
+    const values = [ownerId];
+    const result = await pool.query(query, values);
     return result.rows;
 }
 
-async function getExpense(id) {
-    const query = "SELECT * FROM expenses WHERE id = $1";
-    const values = [id];
+async function getExpense(id, ownerId) {
+    const query = "SELECT * FROM expenses WHERE id = $1 AND owner_id = $2";
+    const values = [id, ownerId];
     const result = await pool.query(query, values);
     if (result.rowCount === 0) {
         const err = new Error("Expense non found");
@@ -23,16 +24,16 @@ async function getExpense(id) {
     return result.rows[0];
 }
 
-async function insertExpense(expense) {
-    const query = "INSERT INTO expenses (title, amount, category, date, description) VALUES ($1, $2, $3, $4, $5) RETURNING *";
-    const values = [expense.title, expense.amount, expense.category, expense.date, expense.description];
+async function insertExpense(expense, ownerId) {
+    const query = "INSERT INTO expenses (title, amount, category, date, description, owner_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
+    const values = [expense.title, expense.amount, expense.category, expense.date, expense.description, ownerId];
     const result = await pool.query(query, values);
     return result.rows[0];
 }
 
-async function updateExpense(id, expense) {
-    const query = "UPDATE expenses SET title = $2, amount = $3, category = $4, date = $5, description = $6 WHERE id = $1 RETURNING *";
-    const values = [id, expense.title, expense.amount, expense.category, expense.date, expense.description];
+async function updateExpense(id, expense, ownerId) {
+    const query = "UPDATE expenses SET title = $2, amount = $3, category = $4, date = $5, description = $6 WHERE id = $1 AND owner_id = $7 RETURNING *";
+    const values = [id, expense.title, expense.amount, expense.category, expense.date, expense.description, ownerId];
     const result = await pool.query(query, values);
     if (result.rowCount === 0) {
         const err = new Error("Expense not found");
@@ -42,9 +43,9 @@ async function updateExpense(id, expense) {
     return result.rows[0];
 }
 
-async function deleteExpense(id) {
-    const query = "DELETE FROM expenses WHERE id = $1";
-    const values = [id];
+async function deleteExpense(id, ownerId) {
+    const query = "DELETE FROM expenses WHERE id = $1 AND owner_id = $2";
+    const values = [id, ownerId];
     const result = await pool.query(query, values);
     if (result.rowCount === 0) {
         const err = new Error("Expense not found");

@@ -1,43 +1,58 @@
 const express = require("express");
 const router = express.Router();
 const { getAllExpenses, getExpense, insertExpense, updateExpense, deleteExpense } = require("../database/db");
-const { validateId, validateCreateExpense, validateUpdateExpense } = require("../middleware/middleware");
+const { validateId, validateCreateExpense, validateUpdateExpense, tempApplyUser } = require("../middleware/middleware");
 
-router.get("/", async (req, res) => {
-    const expenses = await getAllExpenses();
-    res.status(200).json(expenses);
-});
+router.get("/", 
+    tempApplyUser, 
+    async (req, res) => {
+        const expenses = await getAllExpenses(req.user.id);
+        res.status(200).json(expenses);
+    }
+);
 
-router.get("/:id", validateId, async (req, res) => {
-    const expense = await getExpense(req.params.id);
-    res.status(200).json(expense);
-});
+router.get("/:id", 
+    validateId, 
+    tempApplyUser, 
+    async (req, res) => {
+        const expense = await getExpense(req.params.id, req.user.id);
+        res.status(200).json(expense);
+    }
+);
 
 router.post(
     "/", 
     validateCreateExpense, 
+    tempApplyUser, 
     async (req, res) => {
-        const expense = await insertExpense(req.body);
+        const expense = await insertExpense(req.body, req.user.id);
         res.status(201).json({
             message: "Expense created successfully!",
             expense: expense
-    });
-});
+        });
+    }
+);
 
 router.put("/:id", 
     validateId, 
     validateUpdateExpense, 
+    tempApplyUser, 
     async (req, res) => {
-    const expense = await updateExpense(req.params.id, req.body);
-    res.status(200).json({
-        message: "Expense updated successfully!",
-        expense: expense
-    });
-})
+        const expense = await updateExpense(req.params.id, req.body, req.user.id);
+        res.status(200).json({
+            message: "Expense updated successfully!",
+            expense: expense
+        });
+    }
+);
 
-router.delete("/:id", validateId, async (req, res) => {
-    await deleteExpense(req.params.id);
-    res.status(204).end();
-})
+router.delete("/:id", 
+    validateId, 
+    tempApplyUser, 
+    async (req, res) => {
+        await deleteExpense(req.params.id, req.user.id);
+        res.status(204).end();
+    }
+);
 
 module.exports = router;

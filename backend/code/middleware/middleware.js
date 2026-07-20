@@ -109,6 +109,11 @@ async function validateLogin(req, res, next) {
 
 async function authenticateUser(req, res, next) {
     const user = await getUserForAuthentication(req.body.username);
+    if (!user) {
+        return res.status(401).json({
+            error: "Username or password invalid"
+        });
+    }
     const authorised = await bcrypt.compare(req.body.password, user.password_hash);
     delete user.password_hash;
     if (!authorised) {
@@ -117,6 +122,14 @@ async function authenticateUser(req, res, next) {
         })
     }
     req.user = user;
+    next();
+}
+
+function tempApplyUser(req, res, next) {
+    req.user = {
+        id: 8,
+        username: "alice123"
+    };
     next();
 }
 
@@ -142,5 +155,6 @@ module.exports = {
     hashPassword, 
     validateLogin, 
     authenticateUser, 
+    tempApplyUser, 
     errorHandler
 }
