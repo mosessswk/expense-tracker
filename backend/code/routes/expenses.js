@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { getAllExpenses, getExpense, insertExpense, updateExpense, deleteExpense } = require("../database/db");
-const { validateId, validateCreateExpense, validateUpdateExpense, tempApplyUser } = require("../middleware/middleware");
+const { validateId, validateCreateExpense, validateUpdateExpense, authenticateSession } = require("../middleware/middleware");
 
 router.get("/", 
-    tempApplyUser, 
+    authenticateSession, 
     async (req, res) => {
         const expenses = await getAllExpenses(req.user.id);
         res.status(200).json(expenses);
@@ -12,8 +12,8 @@ router.get("/",
 );
 
 router.get("/:id", 
+    authenticateSession, 
     validateId, 
-    tempApplyUser, 
     async (req, res) => {
         const expense = await getExpense(req.params.id, req.user.id);
         res.status(200).json(expense);
@@ -22,8 +22,8 @@ router.get("/:id",
 
 router.post(
     "/", 
+    authenticateSession, 
     validateCreateExpense, 
-    tempApplyUser, 
     async (req, res) => {
         const expense = await insertExpense(req.body, req.user.id);
         res.status(201).json({
@@ -34,9 +34,9 @@ router.post(
 );
 
 router.put("/:id", 
+    authenticateSession, 
     validateId, 
     validateUpdateExpense, 
-    tempApplyUser, 
     async (req, res) => {
         const expense = await updateExpense(req.params.id, req.body, req.user.id);
         res.status(200).json({
@@ -47,8 +47,8 @@ router.put("/:id",
 );
 
 router.delete("/:id", 
+    authenticateSession, 
     validateId, 
-    tempApplyUser, 
     async (req, res) => {
         await deleteExpense(req.params.id, req.user.id);
         res.status(204).end();

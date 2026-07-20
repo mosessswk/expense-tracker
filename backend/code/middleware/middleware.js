@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { isPositiveInt, isNonEmptyString, isAmount, isDate } = require("../utils/utils");
-const { getUserForAuthentication } = require("../database/db");
+const { getUserForAuthentication, getUserById } = require("../database/db");
 
 function requestLogger(req, res, next) {
     console.log(new Date().toISOString(), req.method, req.originalUrl);
@@ -98,7 +98,7 @@ async function hashPassword(req, res, next) {
     next();
 }
 
-async function validateLogin(req, res, next) {
+function validateLogin(req, res, next) {
     if (!isNonEmptyString(req.body.username) || !isNonEmptyString(req.body.password)) {
         return res.status(401).json({
             error: "Username or password invalid"
@@ -121,15 +121,29 @@ async function authenticateUser(req, res, next) {
             error: "Username or password invalid"
         })
     }
-    req.user = user;
+    req.user = {
+        id: user.id,
+        username: user.username,
+        display_name: user.display_name
+    };
+    req.session.userId = user.id;
     next();
 }
 
-function tempApplyUser(req, res, next) {
-    req.user = {
-        id: 8,
-        username: "alice123"
-    };
+async function authenticateSession(req, res, next) {
+    try {
+        req.user = await getUserById(req.session.userId);
+        next();
+    } catch (err) {
+        req.session.destroy();
+        return res.status(401).json({
+            error: "Authentication required"
+        });
+    }
+}
+
+function logout(req, res, next) {
+    req.session.destroy();
     next();
 }
 
@@ -155,6 +169,7 @@ module.exports = {
     hashPassword, 
     validateLogin, 
     authenticateUser, 
-    tempApplyUser, 
+    authenticateSession, 
+    logout, 
     errorHandler
 }

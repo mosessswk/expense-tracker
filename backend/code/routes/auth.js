@@ -1,6 +1,6 @@
 const express = require("express");
-const { validateLogin, authenticateUser } = require("../middleware/middleware");
-const { getUserByUsername } = require("../database/db");
+const { validateLogin, authenticateUser, logout, authenticateSession } = require("../middleware/middleware");
+const { route } = require("./users");
 const router = express.Router();
 
 router.post("/login", 
@@ -14,5 +14,19 @@ router.post("/login",
         })
     }
 );
+
+router.post("/logout", 
+    logout, 
+    (req, res) => {
+        return res.status(204).send();
+    }
+)
+
+router.get("/me", 
+    authenticateSession, 
+    (req, res) => {
+        return res.json(req.user);
+    }
+)
 
 module.exports = router;

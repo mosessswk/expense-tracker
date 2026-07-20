@@ -58,13 +58,18 @@ async function deleteExpense(id, ownerId) {
 async function insertUser(user) {
     const query = "INSERT INTO users (username, password_hash, display_name) VALUES ($1, $2, $3) RETURNING id, username, display_name";
     const values = [user.username, user.password_hash, user.display_name];
-    const result = await pool.query(query, values);
-    if (result.rowCount === 0) {
-        const err = new Error("Username already exists");
-        err.status = 409;
-        throw err;
+    try {
+        const result = await pool.query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.log(error);
+        if (error.code === '23505') {
+            const err = new Error("Username already exists");
+            err.status = 409;
+            throw err;
+        } 
+        throw error;
     }
-    return result.rows[0];
 }
 
 async function getUserById(id) {
