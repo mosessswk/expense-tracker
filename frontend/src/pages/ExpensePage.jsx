@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import ExpenseList from "./ExpenseList";
-import ExpenseForm from "./ExpenseForm";
+import ExpenseList from "../components/ExpenseList";
+import ExpenseForm from "../components/ExpenseForm";
 import { getExpenses, addExpense } from "../services/expenseService";
 
 function ExpensePage() {

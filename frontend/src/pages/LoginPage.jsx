@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LoginForm from "./LoginForm";
+import LoginForm from "../components/LoginForm";
 import { login } from "../services/authService";
 
 function LoginPage({ onLoginSuccess }) {
