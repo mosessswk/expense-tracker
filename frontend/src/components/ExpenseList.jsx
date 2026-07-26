@@ -1,6 +1,6 @@
 import ExpenseCard from "./ExpenseCard";
 
-function ExpenseList({ expenses }) {
+function ExpenseList({ expenses, onEdit }) {
 
     if (expenses.length === 0) return (<>No expenses found.</>);
 
@@ -9,7 +9,7 @@ function ExpenseList({ expenses }) {
     return (
         <>
             {sortedExpenses.map((expense) => (
-                <ExpenseCard key={expense.id} title={expense.title} amount={expense.amount} category={expense.category} date={expense.date} />
+                <ExpenseCard key={expense.id} expense={expense} onEdit={onEdit} />
             ))}
         </>
     );

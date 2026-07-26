@@ -27,10 +27,27 @@ async function addExpense(expense) {
         if (response.ok) {
             return await response.json();
         }
-        console.error(await response.json());
     } catch (error) {
         console.error(error);
     }
 }
 
-export { getExpenses, addExpense };
+async function updateExpense(id, expense) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/expenses/${id}`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(expense)
+        })
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export { getExpenses, addExpense, updateExpense };

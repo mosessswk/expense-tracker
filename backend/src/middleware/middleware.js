@@ -31,7 +31,7 @@ function validateExpense(expense) {
     if ((!isAmount(expense?.amount) && typeof expense?.amount !== "number") || Number(expense.amount) < 0 || Number(expense.amount) >= 1e10) return {error: "Amount invalid"};
     if (!isNonEmptyString(expense?.category)) return {error: "Category invalid"};
     if (!isDate(expense?.date)) return {error: "Date invalid"};
-    if (expense?.description !== undefined && typeof expense.description !== "string") return {error: "Description invalid"};
+    if (expense?.description !== undefined && expense?.description !== null && typeof expense.description !== "string") return {error: "Description invalid"};
     
     return {
         title: expense.title.trim(),

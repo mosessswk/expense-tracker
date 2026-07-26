@@ -1,10 +1,11 @@
-function ExpenseCard({ title, amount, category, date }) {
+function ExpenseCard({ expense, onEdit }) {
     return (
         <>
-            <h3>{title}</h3>
-            <p>Amount : {amount}</p>
-            <p>Category : {category}</p>
-            <p>Date : {date.slice(0, 10)}</p>
+            <h3>{expense.title}</h3>
+            <p>Amount : {expense.amount}</p>
+            <p>Category : {expense.category}</p>
+            <p>Date : {expense.date.slice(0, 10)}</p>
+            <button onClick={() => onEdit(expense)}>Edit</button>
         </>
     );
 }
