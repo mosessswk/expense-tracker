@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseForm from "../components/ExpenseForm";
-import { getExpenses, addExpense, updateExpense } from "../services/expenseService";
+import { getExpenses, addExpense, updateExpense, deleteExpense } from "../services/expenseService";
 
 function ExpensePage() {
 
@@ -43,6 +43,26 @@ function ExpensePage() {
         setEditingExpense(null);
     }
 
+    async function handleDeleteExpense(id) {
+        setIsLoading(true);
+        const confirmed = window.confirm("Are you sure to delete this expense?");
+        if (confirmed) {
+            const result = await deleteExpense(id);
+            if (result) {
+                if (editingExpense?.id === id) {
+                    setEditingExpense(null);
+                }
+                setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
+                setIsLoading(false);
+                return true;
+            } else {
+                alert("Failed to delete expense");
+            }
+        }
+        setIsLoading(false);
+        return false;
+    }
+
     useEffect(() => {
         getExpenses()
         .then((expenses) => {
@@ -68,7 +88,7 @@ function ExpensePage() {
             <h2>------------</h2>
             <h2>Expenses</h2>
             <button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</button>
-            {showExpenses ? <ExpenseList expenses={expenses} onEdit={(expense) => setEditingExpense(expense)} /> : "Expenses hidden."}
+            {showExpenses ? <ExpenseList expenses={expenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : "Expenses hidden."}
             <h2>------------</h2>
             <p>Status : {isAdmin ? "Admin" : "Guest"}</p>
             <p>{isAdmin && "Administrator Controls"}</p>
