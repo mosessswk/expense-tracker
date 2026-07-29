@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseForm from "../components/ExpenseForm";
 import { getExpenses, addExpense, updateExpense, deleteExpense } from "../services/expenseService";
+import ExpenseToolBar from "../components/ExpenseToolBar";
 
 function ExpensePage() {
 
@@ -10,7 +11,10 @@ function ExpensePage() {
     const [expenses, setExpenses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [editingExpense, setEditingExpense] = useState(null);
-
+    const [searchText, setSearchText] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [sortOption, setSortOption] = useState("Oldest First");
+    
     async function handleAddExpense(newExpense) {
         setIsLoading(true);
         const result = await addExpense(newExpense);
@@ -84,6 +88,30 @@ function ExpensePage() {
         })
     }, []);
 
+    const visibleExpenses = useMemo(() => {
+        const filtered = expenses.filter((expense) => {
+            const matchCategory = selectedCategory === "" || expense.category === selectedCategory;
+            const matchSearch = expense.title.toLowerCase().includes(searchText.toLowerCase()) || expense.description?.toLowerCase().includes(searchText.toLowerCase());
+            return matchCategory && matchSearch;
+        })
+        return [...filtered].sort((a, b) => {
+            if (sortOption === "Newest First") {
+                return new Date(b.date) - new Date(a.date);
+            } else if (sortOption === "Oldest First") {
+                return new Date(a.date) - new Date(b.date);
+            } else if (sortOption === "Amount ↑") {
+                return a.amount - b.amount;
+            } else if (sortOption === "Amount ↓") {
+                return b.amount - a.amount;
+            } else if (sortOption === "Title A-Z") {
+                return a.title.localeCompare(b.title);
+            } else if (sortOption === "Title Z-A") {
+                return b.title.localeCompare(a.title);
+            }
+            return 0;
+        })
+    }, [expenses, searchText, selectedCategory, sortOption]);
+
     if (isLoading) return ( <h3>Loading ...</h3> );
 
     return (
@@ -95,8 +123,9 @@ function ExpensePage() {
             <ExpenseForm initialExpense={editingExpense} onSubmit={editingExpense ? handleEditExpense : handleAddExpense} onCancel={handleCancelEdit} />
             <h2>------------</h2>
             <h2>Expenses</h2>
+            <ExpenseToolBar searchText={searchText} setSearchText={setSearchText} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categories={[...new Set(expenses.map((expense) => expense.category))]} sortOption={sortOption} setSortOption={setSortOption} />
             <button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</button>
-            {showExpenses ? <ExpenseList expenses={expenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : "Expenses hidden."}
+            {showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : "Expenses hidden."}
             <h2>------------</h2>
             <p>Status : {isAdmin ? "Admin" : "Guest"}</p>
             <p>{isAdmin && "Administrator Controls"}</p>

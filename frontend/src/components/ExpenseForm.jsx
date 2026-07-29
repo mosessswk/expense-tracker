@@ -7,6 +7,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
     const [date, setDate] = useState("");
+    const [description, setDescription] = useState("");
     const [error, setError] = useState({});
 
     useEffect(() => {
@@ -15,11 +16,13 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
             setAmount(initialExpense.amount);
             setCategory(initialExpense.category);
             setDate(initialExpense.date.slice(0, 10));
+            setDescription(initialExpense.description);
         } else {
             setTitle("");
             setAmount("");
             setCategory("");
             setDate("");
+            setDescription("");
         }
     }, [initialExpense]);
 
@@ -28,6 +31,8 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
         setAmount("");
         setCategory("");
         setDate("");
+        setDescription("");
+        setError({});
         onCancel();
     }
 
@@ -38,7 +43,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
             setError(err);
             return;
         }
-        const expense = initialExpense ? { ...initialExpense, title, amount, category, date } : { title, amount, category, date };
+        const expense = initialExpense ? { ...initialExpense, title, amount, category, date, description } : { title, amount, category, date, description };
         if (await onSubmit(expense)) {
             onCancel();
         }
@@ -62,6 +67,9 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
                 <div>
                     Date : <input type="text" value={date} onChange={(e) => setDate(e.target.value)} />
                     <br/>{error.date && <span style={{ color: "red" }}>{error.date}</span>}
+                </div>
+                <div>
+                    Description : <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
                 &emsp; <button type="button" onClick={handleCancel}>Cancel</button> &emsp;
                 <button type="submit" disabled={Object.keys(error).length > 0 && Object.keys(validateExpense({ title, amount, category, date })).length > 0}>
