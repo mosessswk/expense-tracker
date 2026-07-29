@@ -18,6 +18,8 @@ function ExpensePage() {
             setExpenses((prevExpenses) => [...prevExpenses, result.expense]);
             setIsLoading(false);
             return true;
+        } else if (result?.error) {
+            alert(result.error);
         } else {
             alert("Failed to add expense");
         }
@@ -32,6 +34,8 @@ function ExpensePage() {
             setExpenses((prevExpenses) => prevExpenses.map((expense) => expense.id === result.expense.id ? result.expense : expense));
             setIsLoading(false);
             return true;
+        } else if (result?.error) {
+            alert(result.error);
         } else {
             alert("Failed to edit expense");
         }
@@ -55,6 +59,8 @@ function ExpensePage() {
                 setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
                 setIsLoading(false);
                 return true;
+            } else if (result?.error) {
+                alert(result.error);
             } else {
                 alert("Failed to delete expense");
             }
@@ -65,9 +71,11 @@ function ExpensePage() {
 
     useEffect(() => {
         getExpenses()
-        .then((expenses) => {
-            if (expenses) {
-                setExpenses(expenses);
+        .then((result) => {
+            if (result?.error) {
+                alert(result.error);
+            } else if (result) {
+                setExpenses(result);
                 setIsLoading(false);
             } else {
                 alert("Failed to load expenses");

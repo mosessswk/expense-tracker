@@ -6,9 +6,7 @@ async function getExpenses() {
             method: "GET",
             credentials: "include"
         })
-        if (response.ok) {
-            return await response.json();
-        }
+        return await response.json();
     } catch (error) {
         console.error(error);
     }
@@ -24,9 +22,7 @@ async function addExpense(expense) {
             },
             body: JSON.stringify(expense)
         });
-        if (response.ok) {
-            return await response.json();
-        }
+        return await response.json();
     } catch (error) {
         console.error(error);
     }
@@ -42,9 +38,7 @@ async function updateExpense(id, expense) {
             },
             body: JSON.stringify(expense)
         })
-        if (response.ok) {
-            return await response.json();
-        }
+        return await response.json();
     } catch (error) {
         console.error(error);
     }
