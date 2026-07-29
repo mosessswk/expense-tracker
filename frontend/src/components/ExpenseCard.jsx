@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./ExpenseCard.css";
 
 function ExpenseCard({ expense, onEdit, onDelete }) {
 
@@ -12,15 +13,15 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
     }
 
     return (
-        <>
+        <div className="expense-card">
             <h3>{expense.title}</h3>
-            <p>Amount : {expense.amount}</p>
-            <p>Category : {expense.category}</p>
-            <p>Date : {expense.date.slice(0, 10)}</p>
-            <p>Description : {expense.description}</p>
+            <p>$ {expense.amount}</p>
+            <p>{expense.category}</p>
+            <p>{expense.date.slice(0, 10)}</p>
+            <p className="description">{expense.description}</p>
             <button onClick={() => onEdit(expense)}>Edit</button>
             <button onClick={handleDelete} disabled={isDeleting}>{isDeleting ? "Deleting..." : "Delete"}</button>
-        </>
+        </div>
     );
 }
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./LoginPage.css";
 import LoginForm from "../components/LoginForm";
 import { login } from "../services/authService";
 
@@ -22,13 +23,10 @@ function LoginPage({ onLoginSuccess }) {
     if (isLoading) return ( <h3>Loading ...</h3> );
 
     return (
-        <>
-            <h1>Login Page</h1>
-            <h2>-----------</h2>
-            <p>Please log in.</p>
-            <h2>-----------</h2>
+        <div className="login-page">
+            <h1>Login</h1>
             <LoginForm onLogin={handleLogin} />
-        </>
+        </div>
     )
 }
 

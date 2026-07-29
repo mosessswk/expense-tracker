@@ -1,0 +1,16 @@
+.expense-tool-bar {
+    justify-self: center;
+    max-width: 600px;
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-radius: 16px;
+    background-color: pink;
+}
+.expense-tool-bar > * {
+    padding: 2px;
+}

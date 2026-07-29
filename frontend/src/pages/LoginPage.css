@@ -1,0 +1,7 @@
+.login-page {
+	box-sizing: border-box;
+	text-align: center;
+	max-width: 1200px;
+	padding: 20px;
+    background-color: lightgrey;
+}

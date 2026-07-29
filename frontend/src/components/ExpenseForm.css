@@ -1,0 +1,51 @@
+.expense-form-container {
+    justify-self: center;
+    margin: 20px;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 32px;
+    background-color: lightgreen;
+}
+
+.expense-form {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: max-content 1fr minmax(100px, 300px);
+    gap: 10px;
+
+}
+.expense-form > * {
+    padding: 2px;
+}
+.expense-form > label {
+    justify-self: right;
+    grid-column: 1;
+}
+.expense-form > input {
+    box-sizing: border-box;
+    justify-self: left;
+    width: 100%;
+    grid-column: 2;
+}
+.expense-form > .error {
+    justify-self: left;
+    grid-column: 3;
+    padding: 2px 8px;
+    border: 0.5px solid red;
+    border-radius: 5px;
+    color: red;
+    background-color: pink;
+}
+.expense-form > button {
+    
+    padding: 5px 10px;
+    margin-top: 10px;
+}
+.cancel-button {
+    justify-self: right;
+    grid-column: 2;
+}
+.submit-button {
+    justify-self: left;
+    grid-column: 3;
+}

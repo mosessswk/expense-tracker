@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
+import "./ExpensePage.css";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseForm from "../components/ExpenseForm";
 import { getExpenses, addExpense, updateExpense, deleteExpense } from "../services/expenseService";
 import ExpenseToolBar from "../components/ExpenseToolBar";
 
-function ExpensePage() {
+function ExpensePage({ userName }) {
 
     const isAdmin = false;
     const [showExpenses, setShowExpenses] = useState(true);
@@ -112,24 +113,23 @@ function ExpensePage() {
         })
     }, [expenses, searchText, selectedCategory, sortOption]);
 
-    if (isLoading) return ( <h3>Loading ...</h3> );
-
     return (
-        <>
-            <h1>Expense Page</h1>
-            <h2>------------</h2>
-            <h2>Welcome!</h2>
-            <h2>{editingExpense ? "Edit Expense" : "Add New Expense"}</h2>
+        <div className="expense-page">
+            <h1>Welcome, {userName}!</h1>
             <ExpenseForm initialExpense={editingExpense} onSubmit={editingExpense ? handleEditExpense : handleAddExpense} onCancel={handleCancelEdit} />
-            <h2>------------</h2>
-            <h2>Expenses</h2>
-            <ExpenseToolBar searchText={searchText} setSearchText={setSearchText} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categories={[...new Set(expenses.map((expense) => expense.category))]} sortOption={sortOption} setSortOption={setSortOption} />
-            <button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</button>
-            {showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : "Expenses hidden."}
-            <h2>------------</h2>
-            <p>Status : {isAdmin ? "Admin" : "Guest"}</p>
-            <p>{isAdmin && "Administrator Controls"}</p>
-        </>
+            <div className="expenses-display">
+                <h2>Expenses</h2>
+                <ExpenseToolBar searchText={searchText} setSearchText={setSearchText} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categories={[...new Set(expenses.map((expense) => expense.category))]} sortOption={sortOption} setSortOption={setSortOption} />
+                <button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</button>
+                {isLoading ? <p className="info">Loading...</p> : 
+                    visibleExpenses.length === 0 ? <p className="info">No expenses found.</p> :
+                        showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
+            </div>
+            <footer>
+                <p>Status : {isAdmin ? "Admin" : "Guest"}</p>
+                <p>{isAdmin && "Administrator Controls"}</p>
+            </footer>
+        </div>
     )
 }
 

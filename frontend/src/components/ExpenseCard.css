@@ -1,0 +1,34 @@
+.expense-card {
+    box-sizing: border-box;
+    margin: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-radius: 16px;
+    background-color: skyblue;
+}
+.expense-card > * {
+    margin: 5px 10px;
+    padding: 2px;
+    flex: 1 0 80px;
+}
+.expense-card > h3 {
+    flex: 2 1 160px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: dodgerblue;
+}
+.expense-card > .description {
+    flex: 2 0 160px;
+}
+.expense-card > button {
+    flex: 0;
+    max-width: 50px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}

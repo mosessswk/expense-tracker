@@ -1,6 +1,6 @@
 function SortSelector({ sortOption, onSortChange }) {
     return (
-        <select value={sortOption} onChange={(e) => onSortChange(e.target.value)}>
+        <select className="sort-selector" value={sortOption} onChange={(e) => onSortChange(e.target.value)}>
             <option value="Newest First">Newest First</option>
             <option value="Oldest First">Oldest First</option>
             <option value="Amount ↑">Amount ↑</option>

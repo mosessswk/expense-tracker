@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router'
-import ExpenseCard from './components/ExpenseCard'
-import ExpenseList from './components/ExpenseList'
 import ExpensePage from './pages/ExpensePage'
 import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -9,9 +7,9 @@ import { logout, getCurrentUser } from './services/authService'
 
 function App() {
     const navigate = useNavigate();
-    const myUsername = "Moses";
     const [searchText, setSearchText] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState("");
 
     function handleLoginSuccess() {
         setIsLoggedIn(true);
@@ -32,22 +30,23 @@ function App() {
         .then((user) => {
             if (user) {
                 setIsLoggedIn(true);
+                setUserName(user.display_name || user.username);
                 navigate("/expenses");
             } else {
                 setIsLoggedIn(false);
                 navigate("/login");
             }
         })
-    }, []);
+    }, [isLoggedIn]);
 
     return (
         <>
-            <div>
-                Logged in : {isLoggedIn ? <>Yes &ensp; <button onClick={handleLogout}>Log out</button></> : <>No</>}
-            </div>
+            <header>
+                Logged in : {isLoggedIn ? (<>Yes <button onClick={handleLogout}>Log out</button></>) : <>No</>}
+            </header>
             <Routes>
                 <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
-                <Route path="/expenses" element={<ProtectedRoute isLoggedIn={isLoggedIn} children={<ExpensePage />} />} />
+                <Route path="/expenses" element={<ProtectedRoute isLoggedIn={isLoggedIn} children={<ExpensePage userName={userName} />} />} />
                 <Route path="/" element={<Navigate to="/expenses" replace />} />
             </Routes>
         </>
