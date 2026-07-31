@@ -70,8 +70,9 @@ function validateUpdateExpense(req, res, next) {
 }
 
 function validateUser(user) {
-    if (!isNonEmptyString(user.username)) return {error: "Username invalid"};
-    if (!isNonEmptyString(user.password)) return {error: "Password invalid"};
+    if (!isNonEmptyString(user?.username)) return {error: "Username invalid"};
+    if (!isNonEmptyString(user?.password)) return {error: "Password invalid"};
+    if (!isNonEmptyString(user?.confirm_password) || user.password !== user.confirm_password) return {error: "Passwords do not match"};
     if (user?.display_name !== undefined && typeof user.display_name !== "string") return {error: "Display name invalid"};
 
     return {
