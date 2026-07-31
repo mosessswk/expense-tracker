@@ -4,12 +4,16 @@ import ExpensePage from './pages/ExpensePage'
 import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { logout, getCurrentUser } from './services/authService'
+import Toast from './components/Toast'
+import ConfirmationModal from './components/ConfirmationModal'
 
 function App() {
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState("");
+    const [toast, setToast] = useState(null);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     function handleLoginSuccess() {
         setIsLoggedIn(true);
@@ -17,12 +21,27 @@ function App() {
     }
 
     async function handleLogout() {
+        setShowLogoutConfirm(false);
         if (await logout()) {
             setIsLoggedIn(false);
+            showSuccess("Logout successful");
             navigate("/login");
         } else {
-            alert("Logout failed");
+            showError("Logout failed");
         }
+    }
+
+    function showSuccess(message) {
+        setToast({ message, type: "success"});
+    }
+    function showError(message) {
+        setToast({ message, type: "error"});
+    }
+    function showWarning(message) {
+        setToast({ message, type: "warning"});
+    }
+    function showInfo(message) {
+        setToast({ message, type: "info"});
     }
 
     useEffect(() => {
@@ -42,13 +61,21 @@ function App() {
     return (
         <>
             <header>
-                Logged in : {isLoggedIn ? (<>Yes <button onClick={handleLogout}>Log out</button></>) : <>No</>}
+                Logged in : {isLoggedIn ? (<>Yes <button onClick={() => setShowLogoutConfirm(true)}>Log out</button></>) : <>No</>}
             </header>
             <Routes>
-                <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
-                <Route path="/expenses" element={<ProtectedRoute isLoggedIn={isLoggedIn} children={<ExpensePage userName={userName} />} />} />
+                <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} showSuccess={showSuccess} showError={showError} />} />
+                <Route path="/expenses" element={<ProtectedRoute isLoggedIn={isLoggedIn} children={<ExpensePage userName={userName} showSuccess={showSuccess} showError={showError} showWarning={showWarning} showInfo={showInfo} />} />} />
                 <Route path="/" element={<Navigate to="/expenses" replace />} />
             </Routes>
+            {showLogoutConfirm && (
+                <ConfirmationModal
+                    title="Logout"
+                    message="Are you sure to log out?"
+                    onConfirm={handleLogout}
+                    onCancel={() => setShowLogoutConfirm(false)}
+                />)}
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         </>
     );
 }

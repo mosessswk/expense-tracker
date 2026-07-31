@@ -1,7 +1,9 @@
 .expense-page {
 	box-sizing: border-box;
 	text-align: center;
-	max-width: 1200px;
+    justify-self: center;
+	width: 100%;
+    max-width: 1200px;
 	padding: 20px;
     background-color: lightgrey;
 }

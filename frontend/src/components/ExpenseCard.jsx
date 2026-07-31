@@ -1,9 +1,11 @@
 import { useState } from "react";
 import "./ExpenseCard.css";
+import ConfirmationModal from "./ConfirmationModal";
 
 function ExpenseCard({ expense, onEdit, onDelete }) {
 
     const [isDeleting, setIsDeleting] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     async function handleDelete() {
         if (isDeleting) return;
@@ -20,7 +22,17 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
             <p>{expense.date.slice(0, 10)}</p>
             <p className="description">{expense.description}</p>
             <button onClick={() => onEdit(expense)}>Edit</button>
-            <button onClick={handleDelete} disabled={isDeleting}>{isDeleting ? "Deleting..." : "Delete"}</button>
+            <button className="button-critical" onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting}>
+                {isDeleting ? "Deleting..." : "Delete"}
+            </button>
+            {showDeleteConfirm && (
+                <ConfirmationModal
+                    title="Delete Expense"
+                    message={`Are you sure to delete the expense "${expense.title}"?`}
+                    onConfirm={handleDelete}
+                    onCancel={() => setShowDeleteConfirm(false)}
+                />
+            )}
         </div>
     );
 }

@@ -4,8 +4,9 @@ import ExpenseList from "../components/ExpenseList";
 import ExpenseForm from "../components/ExpenseForm";
 import { getExpenses, addExpense, updateExpense, deleteExpense } from "../services/expenseService";
 import ExpenseToolBar from "../components/ExpenseToolBar";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-function ExpensePage({ userName }) {
+function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }) {
 
     const isAdmin = false;
     const [showExpenses, setShowExpenses] = useState(true);
@@ -17,32 +18,38 @@ function ExpensePage({ userName }) {
     const [sortOption, setSortOption] = useState("Oldest First");
     
     async function handleAddExpense(newExpense) {
+        if (isLoading) return;
         setIsLoading(true);
         const result = await addExpense(newExpense);
         if (result?.expense) {
             setExpenses((prevExpenses) => [...prevExpenses, result.expense]);
+            setEditingExpense(null);
             setIsLoading(false);
+            showSuccess("Expense added successfully");
             return true;
         } else if (result?.error) {
-            alert(result.error);
+            showError(result.error);
         } else {
-            alert("Failed to add expense");
+            showError("Failed to add expense");
         }
         setIsLoading(false);
         return false;
     }
 
     async function handleEditExpense(editedExpense) {
+        if (isLoading) return;
         setIsLoading(true);
         const result = await updateExpense(editedExpense?.id, editedExpense);
         if (result?.expense) {
             setExpenses((prevExpenses) => prevExpenses.map((expense) => expense.id === result.expense.id ? result.expense : expense));
+            setEditingExpense(null);
             setIsLoading(false);
+            showSuccess("Expense updated successfully");
             return true;
         } else if (result?.error) {
-            alert(result.error);
+            showError(result.error);
         } else {
-            alert("Failed to edit expense");
+            showError("Failed to edit expense");
         }
         setIsLoading(false);
         return false;
@@ -50,25 +57,25 @@ function ExpensePage({ userName }) {
 
     function handleCancelEdit() {
         setEditingExpense(null);
+        showInfo("Edit cancelled");
     }
 
     async function handleDeleteExpense(id) {
+        if (isLoading) return;
         setIsLoading(true);
-        const confirmed = window.confirm("Are you sure to delete this expense?");
-        if (confirmed) {
-            const result = await deleteExpense(id);
-            if (result) {
-                if (editingExpense?.id === id) {
-                    setEditingExpense(null);
-                }
-                setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
-                setIsLoading(false);
-                return true;
-            } else if (result?.error) {
-                alert(result.error);
-            } else {
-                alert("Failed to delete expense");
+        const result = await deleteExpense(id);
+        if (result) {
+            if (editingExpense?.id === id) {
+                setEditingExpense(null);
             }
+            setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
+            setIsLoading(false);
+            showSuccess("Expense deleted successfully");
+            return true;
+        } else if (result?.error) {
+            showError(result.error);
+        } else {
+            showError("Failed to delete expense");
         }
         setIsLoading(false);
         return false;
@@ -121,9 +128,10 @@ function ExpensePage({ userName }) {
                 <h2>Expenses</h2>
                 <ExpenseToolBar searchText={searchText} setSearchText={setSearchText} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categories={[...new Set(expenses.map((expense) => expense.category))]} sortOption={sortOption} setSortOption={setSortOption} />
                 <button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</button>
-                {isLoading ? <p className="info">Loading...</p> : 
-                    visibleExpenses.length === 0 ? <p className="info">No expenses found.</p> :
-                        showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
+                {isLoading ? <div><ExpenseList expenses={[{title: "██████", amount: "██.█", category: "████", date: "██-█-█", description: "██████████"}]} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /><LoadingSpinner /></div> :
+                    expenses.length === 0 ? <p className="info">No expenses yet.<br />Create your first expense above.</p> : 
+                        visibleExpenses.length === 0 ? <p className="info">No expenses found.<br />Try another search.</p> :
+                            showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
             </div>
             <footer>
                 <p>Status : {isAdmin ? "Admin" : "Guest"}</p>

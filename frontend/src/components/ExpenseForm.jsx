@@ -57,9 +57,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
             return;
         }
         const expense = initialExpense ? { ...initialExpense, title, amount, category, date, description } : { title, amount, category, date, description };
-        if (await onSubmit(expense)) {
-            onCancel();
-        }
+        await onSubmit(expense);
     }
 
     return (

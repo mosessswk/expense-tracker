@@ -1,7 +1,8 @@
 .login-page {
 	box-sizing: border-box;
+    justify-self: center;
 	text-align: center;
-	max-width: 1200px;
+	width: 100%;
 	padding: 20px;
     background-color: lightgrey;
 }
