@@ -4,7 +4,8 @@ import ExpenseList from "../components/ExpenseList";
 import ExpenseForm from "../components/ExpenseForm";
 import { getExpenses, addExpense, updateExpense, deleteExpense } from "../services/expenseService";
 import ExpenseToolBar from "../components/ExpenseToolBar";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import Button from "../components/ui/Button";
 
 function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }) {
 
@@ -127,8 +128,8 @@ function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }
             <div className="expenses-display">
                 <h2>Expenses</h2>
                 <ExpenseToolBar searchText={searchText} setSearchText={setSearchText} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categories={[...new Set(expenses.map((expense) => expense.category))]} sortOption={sortOption} setSortOption={setSortOption} />
-                <button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</button>
-                {isLoading ? <div><ExpenseList expenses={[{title: "██████", amount: "██.█", category: "████", date: "██-█-█", description: "██████████"}]} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /><LoadingSpinner /></div> :
+                <Button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</Button>
+                {isLoading ? <div><ExpenseList expenses={[{id: 0, title: "██████", amount: "██.█", category: "████", date: "██-█-█", description: "██████████"}]} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /><LoadingSpinner /></div> :
                     expenses.length === 0 ? <p className="info">No expenses yet.<br />Create your first expense above.</p> : 
                         visibleExpenses.length === 0 ? <p className="info">No expenses found.<br />Try another search.</p> :
                             showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}

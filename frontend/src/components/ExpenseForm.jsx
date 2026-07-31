@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
+import { expenseValidator } from "../validators/expenseValidator";
+import Button from "./ui/Button";
 import "./ExpenseForm.css";
-import { validateExpense } from "../utils/validateExpense";
 
 function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
 
@@ -33,7 +34,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
 
     useMemo(() => {
         if (validate) {
-            setError(validateExpense({ title, amount, category, date }));
+            setError(expenseValidator({ title, amount, category, date }));
         }
     }, [title, amount, category, date, validate]);
 
@@ -51,7 +52,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
     async function handleSubmit(event) {
         event.preventDefault();
         setValidate(true);
-        const err = validateExpense({ title, amount, category, date });
+        const err = expenseValidator({ title, amount, category, date });
         if (Object.keys(err).length > 0) {
             setError(err);
             return;
@@ -84,10 +85,10 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
                 <label>Description :</label>
                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
                 <br />
-                <button className="cancel-button" type="button" onClick={handleCancel}>Cancel</button>
-                <button className="submit-button" type="submit" disabled={Object.keys(error).length > 0 && Object.keys(validateExpense({ title, amount, category, date })).length > 0}>
+                <Button className="cancel-button" variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
+                <Button className="submit-button" type="submit" disabled={Object.keys(error).length > 0 && Object.keys(expenseValidator({ title, amount, category, date })).length > 0}>
                     {initialExpense ? "Update Expense" : "Submit Expense"}
-                </button>
+                </Button>
             </form>
         </div>
     )

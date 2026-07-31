@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 function ConfirmationModal({ title, message, onConfirm, onCancel }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -5,8 +7,8 @@ function ConfirmationModal({ title, message, onConfirm, onCancel }) {
                 <h2 className="text-xl font-semibold mb-4">{title}</h2>
                 <p className="mb-6">{message}</p>
                 <div className="flex justify-end gap-4">
-                    <button onClick={onCancel}>Cancel</button>
-                    <button className="button-critical" onClick={onConfirm}>Confirm</button>
+                    <Button onClick={onCancel}>Cancel</Button>
+                    <Button variant="critical" onClick={onConfirm}>Confirm</Button>
                 </div>
             </div>
         </div>

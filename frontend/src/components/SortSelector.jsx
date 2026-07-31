@@ -1,4 +1,4 @@
-import Dropdown from './Dropdown';
+import Dropdown from './ui/Dropdown';
 
 function SortSelector({ sortOption, onSortChange }) {
     return (

@@ -4,15 +4,17 @@ import ExpensePage from './pages/ExpensePage'
 import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { logout, getCurrentUser } from './services/authService'
-import Toast from './components/Toast'
-import ConfirmationModal from './components/ConfirmationModal'
+import Toast from './components/ui/Toast'
+import { useToast } from './hooks/useToast'
+import ConfirmationModal from './components/ui/ConfirmationModal'
+import Button from './components/ui/Button'
 
 function App() {
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState("");
-    const [toast, setToast] = useState(null);
+    const { toast, showSuccess, showError, showWarning, showInfo, hideToast } = useToast();
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     function handleLoginSuccess() {
@@ -24,24 +26,11 @@ function App() {
         setShowLogoutConfirm(false);
         if (await logout()) {
             setIsLoggedIn(false);
-            showSuccess("Logout successful");
+            showInfo("Logout successful");
             navigate("/login");
         } else {
             showError("Logout failed");
         }
-    }
-
-    function showSuccess(message) {
-        setToast({ message, type: "success"});
-    }
-    function showError(message) {
-        setToast({ message, type: "error"});
-    }
-    function showWarning(message) {
-        setToast({ message, type: "warning"});
-    }
-    function showInfo(message) {
-        setToast({ message, type: "info"});
     }
 
     useEffect(() => {
@@ -61,7 +50,7 @@ function App() {
     return (
         <>
             <header>
-                Logged in : {isLoggedIn ? (<>Yes <button onClick={() => setShowLogoutConfirm(true)}>Log out</button></>) : <>No</>}
+                Logged in : {isLoggedIn ? (<>Yes <Button onClick={() => setShowLogoutConfirm(true)}>Log out</Button></>) : <>No</>}
             </header>
             <Routes>
                 <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} showSuccess={showSuccess} showError={showError} />} />
@@ -75,7 +64,7 @@ function App() {
                     onConfirm={handleLogout}
                     onCancel={() => setShowLogoutConfirm(false)}
                 />)}
-            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => hideToast()} />}
         </>
     );
 }

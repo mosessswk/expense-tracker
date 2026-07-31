@@ -1,4 +1,4 @@
-function validateExpense(expense) {
+function expenseValidator(expense) {
     let err = {};
     if (!expense.title.trim()) err.title = "Title is required";
     if (!expense.amount.trim() || isNaN(expense.amount)) err.amount = "Amount must be a number";
@@ -7,4 +7,4 @@ function validateExpense(expense) {
     return err;
 }
 
-export { validateExpense };
+export { expenseValidator };

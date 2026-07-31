@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./ExpenseCard.css";
-import ConfirmationModal from "./ConfirmationModal";
+import ConfirmationModal from "./ui/ConfirmationModal";
+import Button from "./ui/Button";
 
 function ExpenseCard({ expense, onEdit, onDelete }) {
 
@@ -21,10 +22,10 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
             <p>{expense.category}</p>
             <p>{expense.date.slice(0, 10)}</p>
             <p className="description">{expense.description}</p>
-            <button onClick={() => onEdit(expense)}>Edit</button>
-            <button className="button-critical" onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting}>
+            <Button onClick={() => onEdit(expense)}>Edit</Button>
+            <Button variant="critical" onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting}>
                 {isDeleting ? "Deleting..." : "Delete"}
-            </button>
+            </Button>
             {showDeleteConfirm && (
                 <ConfirmationModal
                     title="Delete Expense"

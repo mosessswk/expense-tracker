@@ -1,4 +1,4 @@
-import Dropdown from "./Dropdown";
+import Dropdown from "./ui/Dropdown";
 
 function CategoryFilter({ selectedCategory, onCategoryChange, categories=["test"] }) {
     return (

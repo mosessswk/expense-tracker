@@ -2,11 +2,15 @@ import { useEffect } from "react";
 
 function Toast({ message, type, onClose }) {
 
-    setTimeout(() => {
-        onClose();
-    }, 3000);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onClose();
+        }, 3000);
 
-    const baseClasses = "px-3 py-1 rounded-full flex justify-center items-center outline"
+        return () => clearTimeout(timer);
+    }, [onClose]);
+
+    const baseClasses = "px-3 py-1 rounded-full flex flex-wrap justify-center items-center outline"
 
     let classes = "";
     switch (type) {

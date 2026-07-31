@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./LoginPage.css";
 import LoginForm from "../components/LoginForm";
 import { login } from "../services/authService";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 function LoginPage({ onLoginSuccess, showSuccess, showError }) {
 

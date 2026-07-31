@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./ui/Button";
 import "./LoginForm.css";
 
 function LoginForm({ onLogin }) {
@@ -19,9 +20,7 @@ function LoginForm({ onLogin }) {
             
             <label>Password : </label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button type="submit">
-                Log In
-            </button>
+            <Button type="submit">Log In</Button>
         </form>
     )
 }

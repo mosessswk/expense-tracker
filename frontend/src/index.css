@@ -5,28 +5,6 @@
   --color-brand-secondary: #f3f4f6;
   --font-display: "Inter", sans-serif;
 }
-
-button {
-    padding: 5px;
-    margin: 2px;
-    border: 1px solid grey;
-    border-radius: 5px;
-    color: rgb(98, 98, 98);
-    background-color: lightblue;
-}
-button:disabled,
-button[disabled],
-.button-disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-button[critical],
-.button-critical {
-    outline: 2px solid red;
-    color: black;
-    background-color: #ff5353;
-}
-
 .info {
     justify-self: center;
     margin: 20px;
@@ -36,7 +14,6 @@ button[critical],
     border: 2px solid aqua;
     background-color: lightblue;
 }
-
 header {
     height: 60px;
     display: flex;
@@ -47,14 +24,12 @@ header {
     color: dimgrey;
     background-color: lightblue;
 }
-
 input {
     background-color: white;
     border: 1px solid grey;
     border-radius: 5px;
     padding: 2px 5px;
 }
-
 select {
     background-color: white;
     border: 1px solid grey;
