@@ -71,7 +71,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
                 {error.title && <span className="error">{error.title}</span>}
 
                 <label>Amount* :</label>
-                <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
                 {error.amount && <span className="error">{error.amount}</span>}
 
                 <label>Category* :</label>
