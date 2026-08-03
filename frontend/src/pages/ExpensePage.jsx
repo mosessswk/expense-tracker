@@ -6,6 +6,7 @@ import { getExpenses, addExpense, updateExpense, deleteExpense } from "../servic
 import ExpenseToolBar from "../components/ExpenseToolBar";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Button from "../components/ui/Button";
+import Dashboard from "../components/Dashboard/Dashboard";
 
 function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }) {
 
@@ -128,11 +129,12 @@ function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }
             <div className="expenses-display">
                 <h2>Expenses</h2>
                 <ExpenseToolBar searchText={searchText} setSearchText={setSearchText} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categories={[...new Set(expenses.map((expense) => expense.category))]} sortOption={sortOption} setSortOption={setSortOption} />
+                <Dashboard expenses={visibleExpenses} />
                 <Button onClick={() => setShowExpenses((s) => !s)}>Show / Hide expenses</Button>
                 {isLoading ? <div><ExpenseList expenses={[{id: 0, title: "██████", amount: "██.█", category: "████", date: "██-█-█", description: "██████████"}]} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /><LoadingSpinner /></div> :
                     expenses.length === 0 ? <p className="info">No expenses yet.<br />Create your first expense above.</p> : 
                         visibleExpenses.length === 0 ? <p className="info">No expenses found.<br />Try another search.</p> :
-                            showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
+                            showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => {window.scrollTo({top: 0, behavior: "smooth"}); setEditingExpense(expense)}} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
             </div>
             <footer>
                 <p>Status : {isAdmin ? "Admin" : "Guest"}</p>

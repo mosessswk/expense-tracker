@@ -58,7 +58,15 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
             return;
         }
         const expense = initialExpense ? { ...initialExpense, title, amount, category, date, description } : { title, amount, category, date, description };
-        await onSubmit(expense);
+        if (await onSubmit(expense)) {
+            setTitle("");
+            setAmount("");
+            setCategory("");
+            setDate("");
+            setDescription("");
+            setError({});
+            setValidate(false);
+        }
     }
 
     return (
@@ -78,7 +86,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
                 <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
                 {error.category && <span className="error">{error.category}</span>}
 
-                <label>Date* :</label>
+                <label>Date* (YYYY-MM-DD) :</label>
                 <input type="text" value={date} onChange={(e) => setDate(e.target.value)} />
                 {error.date && <span className="error">{error.date}</span>}
 

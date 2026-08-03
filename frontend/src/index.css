@@ -5,6 +5,18 @@
   --color-brand-secondary: #f3f4f6;
   --font-display: "Inter", sans-serif;
 }
+h1 {
+    font-weight: 700;
+    font-size: 32px;
+}
+h2 {
+    font-weight: 600;
+    font-size: 24px;
+}
+h3, h4, h5, h6 {
+    font-weight: 500;
+    font-size: 18px;
+}
 .info {
     justify-self: center;
     margin: 20px;
