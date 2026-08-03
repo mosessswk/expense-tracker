@@ -4,7 +4,7 @@ import LoginForm from "../components/LoginForm";
 import { login } from "../services/authService";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
-function LoginPage({ onLoginSuccess, showSuccess, showError }) {
+function LoginPage({ onLoginSuccess, onRegister, showSuccess, showError }) {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +28,7 @@ function LoginPage({ onLoginSuccess, showSuccess, showError }) {
     return (
         <div className="login-page">
             <h1>Login</h1>
-            <LoginForm onLogin={handleLogin} />
+            <LoginForm onLogin={handleLogin} onRegister={onRegister} />
         </div>
     )
 }

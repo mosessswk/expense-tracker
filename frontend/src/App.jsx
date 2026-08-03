@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router'
 import ExpensePage from './pages/ExpensePage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { logout, getCurrentUser } from './services/authService'
 import Toast from './components/ui/Toast'
@@ -20,6 +21,18 @@ function App() {
     function handleLoginSuccess() {
         setIsLoggedIn(true);
         navigate("/expenses");
+    }
+
+    function handleLoginRegister() {
+        navigate("/register");
+    }
+
+    function handleRegisterSuccess(username) {
+        navigate("/login?username=" + encodeURIComponent(username));
+    }
+
+    function handleRegisterCancel() {
+        navigate("/login");
     }
 
     async function handleLogout() {
@@ -42,7 +55,9 @@ function App() {
                 navigate("/expenses");
             } else {
                 setIsLoggedIn(false);
-                navigate("/login");
+                if (window.location.pathname !== "/login" && window.location.pathname !== "/register") {
+                    navigate("/login");
+                }
             }
         })
     }, [isLoggedIn]);
@@ -53,7 +68,8 @@ function App() {
                 Logged in : {isLoggedIn ? (<>Yes <Button onClick={() => setShowLogoutConfirm(true)}>Log out</Button></>) : <>No</>}
             </header>
             <Routes>
-                <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} showSuccess={showSuccess} showError={showError} />} />
+                <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} onRegister={handleLoginRegister} showSuccess={showSuccess} showError={showError} />} />
+                <Route path="/register" element={<RegisterPage onRegisterSuccess={handleRegisterSuccess} onCancel={handleRegisterCancel} showSuccess={showSuccess} showWarning={showWarning} showError={showError} />} />
                 <Route path="/expenses" element={<ProtectedRoute isLoggedIn={isLoggedIn} children={<ExpensePage userName={userName} showSuccess={showSuccess} showError={showError} showWarning={showWarning} showInfo={showInfo} />} />} />
                 <Route path="/" element={<Navigate to="/expenses" replace />} />
             </Routes>

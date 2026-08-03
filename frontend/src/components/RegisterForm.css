@@ -1,29 +1,26 @@
-.expense-form-container {
+.register-form {
+    box-sizing: border-box;
     justify-self: center;
+    display: grid;
+    grid-template-columns: max-content 1fr minmax(100px, 300px);
+    gap: 10px;
     margin: 20px;
     max-width: 800px;
     padding: 20px;
     border-radius: 32px;
     background-color: lightgreen;
 }
-.expense-form {
-    box-sizing: border-box;
-    display: grid;
-    grid-template-columns: max-content 1fr minmax(100px, 300px);
-    gap: 10px;
-
-}
-.expense-form > label {
+.register-form > label {
     justify-self: right;
     grid-column: 1;
 }
-.expense-form > input {
+.register-form > input {
     box-sizing: border-box;
     justify-self: left;
     width: 100%;
     grid-column: 2;
 }
-.expense-form > .error {
+.register-form > .error {
     justify-self: left;
     grid-column: 3;
     padding: 2px 8px;
@@ -32,14 +29,14 @@
     color: red;
     background-color: pink;
 }
-.expense-form > button {
+.register-form > button {
     margin-top: 10px;
 }
-.cancel-button {
+.submit-button {
     justify-self: right;
     grid-column: 2;
 }
-.submit-button {
+.cancel-button {
     justify-self: left;
     grid-column: 3;
 }

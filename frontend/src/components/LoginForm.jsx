@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "./ui/Button";
 import "./LoginForm.css";
 
-function LoginForm({ onLogin }) {
+function LoginForm({ onLogin, onRegister }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const usernameParam = urlParams.get("username");
+        if (usernameParam) {
+            setUsername(usernameParam);
+        }
+    })
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -20,7 +28,8 @@ function LoginForm({ onLogin }) {
             
             <label>Password : </label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <Button type="submit">Log In</Button>
+            <Button className="login-button" type="submit">Log In</Button>
+            <Button className="register-button" variant="secondary" type="button" onClick={onRegister}>Register an account</Button>
         </form>
     )
 }

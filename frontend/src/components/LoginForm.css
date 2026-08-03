@@ -10,9 +10,6 @@
     border-radius: 32px;
     background-color: lightgreen;
 }
-.login-form > * {
-    padding: 2px;
-}
 .login-form > label {
     justify-self: right;
     grid-column: 1;
@@ -26,6 +23,7 @@
 .login-form > button {
     justify-self: center;
     grid-column: 1 / 3;
-    padding: 5px 10px;
+}
+.login-button {
     margin-top: 10px;
 }

@@ -37,6 +37,31 @@ async function logout() {
     }
 }
 
+async function register({ username, password, confirmPassword, displayName }) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/users`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password,
+                confirm_password: confirmPassword,
+                display_name: displayName
+            })
+        })
+        if (response.ok) {
+            return await response.json();
+        } else if (response.status === 409 || response.status === 400) {
+            return await response.json();
+        } 
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function getCurrentUser() {
     try {
         const response = await fetch(`${API_BASE_URL}/auth/me`, {
@@ -51,4 +76,4 @@ async function getCurrentUser() {
     }
 }
 
-export { login, logout, getCurrentUser };
+export { login, logout, register, getCurrentUser };

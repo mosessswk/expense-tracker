@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { expenseValidator } from "../validators/expenseValidator";
 import Button from "./ui/Button";
 import "./ExpenseForm.css";
@@ -32,7 +32,7 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
         }
     }, [initialExpense]);
 
-    useMemo(() => {
+    useEffect(() => {
         if (validate) {
             setError(expenseValidator({ title, amount, category, date }));
         }
@@ -85,10 +85,10 @@ function ExpenseForm({ initialExpense, onSubmit, onCancel }) {
                 <label>Description :</label>
                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
                 <br />
-                <Button className="cancel-button" variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
                 <Button className="submit-button" type="submit" disabled={Object.keys(error).length > 0 && Object.keys(expenseValidator({ title, amount, category, date })).length > 0}>
                     {initialExpense ? "Update Expense" : "Submit Expense"}
                 </Button>
+                <Button className="cancel-button" variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
         </div>
     )

@@ -1,0 +1,8 @@
+.register-page {
+	box-sizing: border-box;
+    justify-self: center;
+	text-align: center;
+	width: 100%;
+	padding: 20px;
+    background-color: lightgrey;
+}
