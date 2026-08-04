@@ -1,9 +1,10 @@
-function registerValidator(user) {
+function registerValidator(input) {
     let err = {};
-    if (!user.username.trim()) err.username = "Username is required";
-    if (!user.password) err.password = "Password is required";
-    if (!user.confirmPassword) err.confirmPassword = "Please confirm your password";
-    if (user.password !== user.confirmPassword) err.confirmPassword = "Passwords do not match";
+    if (!input.username.trim()) err.username = "Username is required";
+    if (input.password.length < 8) err.password = "Password at least 8 characters long";
+    if (!input.password) err.password = "Password is required";
+    if (input.password !== input.confirmPassword) err.confirmPassword = "Passwords do not match";
+    if (!input.confirmPassword) err.confirmPassword = "Please confirm your password";
     return err;
 }
 
