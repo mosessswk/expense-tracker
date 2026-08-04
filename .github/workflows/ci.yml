@@ -21,8 +21,19 @@ jobs:
 
       - name: npm ci
         run: npm ci
+        working-directory: ./frontend
+
+      - name: npm test
+        run: npm test
+        working-directory: ./frontend
+      
+      - name: build frontend
+        run: npm run build
+        working-directory: ./frontend
+
+      - name: npm ci
+        run: npm ci
         working-directory: ./backend
 
-      - name: npm run build
-        run: npm run build
-        working-directory: ./backend
+      - name: docker compose config
+        run: docker compose config
