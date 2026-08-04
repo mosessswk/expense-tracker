@@ -25,3 +25,4 @@ jobs:
 
       - name: npm start
         run: npm start
+        working-directory: ./backend
