@@ -47,5 +47,5 @@ jobs:
           SESSION_SECRET=test-secret
           EOF
 
-      - name: docker compose config
-        run: docker compose config
+      - name: docker compose
+        run: docker compose up --build
