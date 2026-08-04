@@ -7,10 +7,20 @@ on:
   pull_request:
 
 jobs:
-  hello:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - run: echo "GitHub Actions works!"
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: npm ci
+        run: npm ci
+
+      - name: npm start
+        run: npm start
