@@ -48,4 +48,4 @@ jobs:
           EOF
 
       - name: docker compose
-        run: docker compose up --build
+        run: docker compose up --build -d
