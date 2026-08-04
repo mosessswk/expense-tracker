@@ -34,6 +34,18 @@ jobs:
       - name: npm ci
         run: npm ci
         working-directory: ./backend
+      
+      - name: create .env file
+        run: |
+          cat > backend/.env <<EOF
+          DB_HOST=db
+          DB_PORT=5432
+          DB_NAME=expense_tracker
+          DB_USER=postgres
+          DB_PASSWORD=password
+          PORT=3000
+          SESSION_SECRET=test-secret
+          EOF
 
       - name: docker compose config
         run: docker compose config
