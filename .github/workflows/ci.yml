@@ -18,6 +18,23 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '24'
+      
+      - name: Create root .env
+        run: |
+          cat <<EOF > .env
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          EOF
+
+      - name: Create backend .env
+        run: |
+          cat <<EOF > backend/.env
+          DB_HOST=database
+          DB_USER=${{ secrets.POSTGRES_USER }}
+          DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          DB_NAME=${{ secrets.POSTGRES_DB }}
+          EOF
 
       - name: npm ci
         run: npm ci
