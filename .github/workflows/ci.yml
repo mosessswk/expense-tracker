@@ -25,6 +25,7 @@ jobs:
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          SESSION_SECRET=${{ secrets.SESSION_SECRET }}
           EOF
 
       - name: Create backend .env
@@ -35,7 +36,6 @@ jobs:
           DB_NAME=${{ secrets.POSTGRES_DB }}
           DB_USER=${{ secrets.POSTGRES_USER }}
           DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          SESSION_SECRET=${{ secrets.SESSION_SECRET }}
           PORT=3000
           EOF
 
