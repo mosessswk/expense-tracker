@@ -1,10 +1,11 @@
-import {useMemo} from "react";
+import React from "react";
+import { useMemo } from "react";
 import { getTotalSpending, getExpenseCount, getLargestExpense, getCategoryTotals, getMonthlyTotals } from "../../utils/analytics";
 import CategoryPieChart from "./CategoryPieChart";
 import MonthlyTrendChart from "./MonthlyTrendChart";
 import SummaryCard from "./SummaryCard";
 
-function Dashboard({ expenses }) {
+const Dashboard = React.memo(function Dashboard({ expenses }) {
     const { totalSpending, numberOfExpenses, largestExpense, categoryTotals, monthlyTotals } = useMemo(() => {
         return {
             totalSpending: getTotalSpending(expenses),
@@ -28,6 +29,6 @@ function Dashboard({ expenses }) {
             }
         </div>
     )
-}
+});
 
 export default Dashboard;

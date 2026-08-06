@@ -1,9 +1,10 @@
+import React from "react";
 import { useState } from "react";
 import "./ExpenseCard.css";
 import ConfirmationModal from "./ui/ConfirmationModal";
 import Button from "./ui/Button";
 
-function ExpenseCard({ expense, onEdit, onDelete }) {
+const ExpenseCard = React.memo(function ExpenseCard({ expense, onEdit, onDelete }) {
 
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -36,6 +37,6 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
             )}
         </div>
     );
-}
+});
 
 export default ExpenseCard;

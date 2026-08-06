@@ -1,6 +1,7 @@
+import React from "react";
 import ExpenseCard from "./ExpenseCard";
 
-function ExpenseList({ expenses, onEdit, onDelete }) {
+const ExpenseList = React.memo(function ExpenseList({ expenses, onEdit, onDelete }) {
 
     return (
         <>
@@ -9,6 +10,6 @@ function ExpenseList({ expenses, onEdit, onDelete }) {
             ))}
         </>
     );
-}
+});
 
 export default ExpenseList;

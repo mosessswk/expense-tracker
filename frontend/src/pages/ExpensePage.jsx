@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import "./ExpensePage.css";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseForm from "../components/ExpenseForm";
@@ -62,7 +62,13 @@ function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }
         showInfo("Edit cancelled");
     }
 
-    async function handleDeleteExpense(id) {
+    const handleStartEdit = useCallback((expense) => {
+        setEditingExpense(expense);
+        window.scrollTo({top: 0, behavior: "smooth"});
+    }, []);
+
+
+    const handleDeleteExpense = useCallback(async (id) => {
         if (isLoading) return;
         setIsLoading(true);
         const result = await deleteExpense(id);
@@ -81,7 +87,7 @@ function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }
         }
         setIsLoading(false);
         return false;
-    }
+    }, [isLoading, editingExpense, showError, showSuccess]);
 
     useEffect(() => {
         getExpenses()
@@ -134,7 +140,7 @@ function ExpensePage({ userName, showSuccess, showError, showWarning, showInfo }
                 {isLoading ? <div><ExpenseList expenses={[{id: 0, title: "██████", amount: "██.█", category: "████", date: "██-█-█", description: "██████████"}]} onEdit={(expense) => setEditingExpense(expense)} onDelete={handleDeleteExpense} /><LoadingSpinner /></div> :
                     expenses.length === 0 ? <p className="info">No expenses yet.<br />Create your first expense above.</p> : 
                         visibleExpenses.length === 0 ? <p className="info">No expenses found.<br />Try another search.</p> :
-                            showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={(expense) => {window.scrollTo({top: 0, behavior: "smooth"}); setEditingExpense(expense)}} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
+                            showExpenses ? <ExpenseList expenses={visibleExpenses} onEdit={handleStartEdit} onDelete={handleDeleteExpense} /> : <p className="info">Expenses hidden.</p>}
             </div>
             <footer>
                 <p>Status : {isAdmin ? "Admin" : "Guest"}</p>
