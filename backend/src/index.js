@@ -4,6 +4,7 @@ const session = require("express-session");
 const cors = require("cors");
 const { requestLogger, responseTimeLogger, errorHandler } = require('./middleware/middleware');
 const port = process.env.PORT;
+const secret = process.env.SESSION_SECRET;
 const app = express();
 
 app.use(cors({
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(requestLogger, responseTimeLogger);
 
 app.use(session({
-    secret: "testing", 
+    secret: secret, 
     resave: false, 
     saveUninitialized: false
 }));
