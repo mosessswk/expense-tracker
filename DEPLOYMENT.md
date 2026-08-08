@@ -12,15 +12,13 @@ The application consists of:
 
 ---
 
-# Prerequisites
+## Prerequisites
 
 Ensure the following software is installed:
 
-| Software | Version |
-|----------|----------|
-| Docker Desktop | Latest |
-| Docker Compose | Latest |
-| Git | Latest |
+* Docker Desktop
+* Docker Compose
+*  Git
 
 Verify installation:
 
@@ -32,7 +30,7 @@ git --version
 
 ---
 
-# Clone the Repository
+## Clone the Repository
 
 ```bash
 git clone https://github.com/mosessswk/expense-tracker
@@ -41,11 +39,11 @@ cd expense-tracker
 
 ---
 
-# Environment Variables
+## Environment Variables
 
 Create the required environment files.
 
-## Root
+### Root
 
 Create:
 
@@ -63,7 +61,7 @@ POSTGRES_PASSWORD=db_password
 
 ---
 
-## Backend
+### Backend
 
 Create:
 
@@ -77,17 +75,18 @@ Example:
 DB_HOST=localhost
 DB_PORT=5432
 PORT=3000
+SESSION_SECRET="secret"
 ```
 
 ---
 
-## Frontend
+### Frontend
 
 (currently not required)
 
 ---
 
-# Build the Application
+## Build the Application
 
 Run:
 
@@ -97,7 +96,7 @@ docker compose build
 
 ---
 
-# Start the Application
+## Start the Application
 
 ```bash
 docker compose up -d
@@ -117,28 +116,7 @@ docker compose ps
 
 ---
 
-# Database Initialisation
-
-The PostgreSQL container automatically runs:
-
-```
-init.sql
-```
-
-during first startup.
-
-If deploying from scratch, no additional setup is required.
-
-If rebuilding an existing database:
-
-```bash
-docker compose down -v
-docker compose up -d
-```
-
----
-
-# Verify Deployment
+## Verify Deployment
 
 Open:
 
@@ -156,7 +134,7 @@ http://localhost:3000
 
 ---
 
-# Stopping the Application
+## Stopping the Application
 
 ```bash
 docker compose down
@@ -164,7 +142,7 @@ docker compose down
 
 ---
 
-# Updating the Application
+## Updating the Application
 
 Pull the latest changes:
 
@@ -177,6 +155,95 @@ Rebuild:
 ```bash
 docker compose up --build -d
 ```
+
+---
+
+# Database
+
+PostgreSQL is automatically initialised through the files mounted from:
+
+```text
+backend/database/
+```
+
+The files are executed by PostgreSQL's Docker entrypoint when the database volume is created.
+
+## Initialisation
+
+The PostgreSQL container automatically runs:
+
+```
+01_schema.sql
+02_seed.sql
+```
+
+during first startup.
+
+If deploying from scratch, no additional setup is required.
+
+If rebuilding an existing database:
+
+```bash
+docker compose down -v
+docker compose up -d
+```
+
+---
+
+## Schema
+
+`01_schema.sql` creates the application's database tables, including:
+
+* `users`
+* `expenses`
+
+Expenses are associated with users through `owner_id`.
+
+The database also enforces:
+
+* Primary keys
+* Unique usernames
+* Foreign-key relationships
+
+## Seed Data
+
+`02_seed.sql` inserts development/sample users and expenses.
+
+The seed file is only executed when PostgreSQL initialises a **new database volume**.
+
+Therefore, changing the seed file will not automatically change an existing database. To re-run the initialisation scripts:
+
+```bash
+docker compose down -v
+docker compose up --build
+```
+
+---
+
+# Testing
+
+Run the frontend test suite with:
+
+```bash
+cd frontend
+npm test
+```
+
+The backend currently does not have an implemented automated test suite.
+
+---
+
+# CI
+
+The repository includes GitHub Actions workflows under:
+
+```text
+.github/workflows/
+```
+
+The GitHub Actions CI workflow runs frontend tests and builds, validates the Docker Compose configuration, and builds and starts the application containers.
+
+Environment-specific values should be supplied through GitHub Actions secrets/environment variables rather than committing real `.env` files to the repository.
 
 ---
 
@@ -229,36 +296,3 @@ backend/.env
 ```
 
 ---
-
-# Production Considerations
-
-Before deploying to production:
-
-- Use strong passwords
-- Enable HTTPS
-- Restrict database access
-- Regularly back up the PostgreSQL database
-- Do not commit `.env` files to Git
-
----
-
-# Deployment Architecture
-
-```
-Browser
-    │
-    ▼
-Frontend (React/Vite)
-    │
-    ▼
-REST API
-    │
-    ▼
-Backend (Express)
-    │
-    ▼
-PostgreSQL Driver
-    │
-    ▼
-PostgreSQL Database
-```
