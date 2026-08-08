@@ -72,7 +72,7 @@ backend/.env
 Example:
 
 ```env
-DB_HOST=localhost
+DB_HOST=database
 DB_PORT=5432
 PORT=3000
 SESSION_SECRET="secret"
