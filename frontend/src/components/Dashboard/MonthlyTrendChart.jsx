@@ -22,7 +22,7 @@ function MonthlyTrendChart({ monthlyTotals }) {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="total" stroke="#8884d8" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="total" name="Monthly Spending" stroke="#8884d8" activeDot={{ r: 8 }} />
             </LineChart>
         </ResponsiveContainer>
     );
