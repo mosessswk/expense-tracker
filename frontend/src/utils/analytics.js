@@ -3,7 +3,7 @@ function getExpenseCount(expenses) {
 }
 
 function getTotalSpending(expenses) {
-    return expenses.reduce((total, expense) => total + Number(expense.amount), 0).toFixed(2);
+    return expenses.reduce((total, expense) => Number((total + Number(expense.amount)).toFixed(2)), 0);
 }
 
 function getLargestExpense(expenses) {
@@ -17,9 +17,9 @@ function getCategoryTotals(expenses) {
         totals[expense.category] += Number(expense.amount);
         return totals;
     }, {});
-    return Object.entries(categoryTotals).map(([category, total]) => ({ category, total }));
+    return Object.entries(categoryTotals).map(([category, total]) => ({ category, total: Number(total.toFixed(2)) }));
 }
-    
+
 function getMonthlyTotals(expenses) {
     const monthlyTotals = expenses.reduce((totals, expense) => {
         const month = expense.date.slice(0, 7);
@@ -30,12 +30,12 @@ function getMonthlyTotals(expenses) {
 
     return Object.entries(monthlyTotals)
         .sort(([monthA], [monthB]) => monthA.localeCompare(monthB))
-        .map(([month, total]) => ({ month, total: total.toFixed(2) }));
+        .map(([month, total]) => ({ month, total: Number(total.toFixed(2)) }));
 }
 
 function getAverageExpense(expenses) {
     if (expenses.length === 0) return 0;
-    return (Number(getTotalSpending(expenses)) / getExpenseCount(expenses));
+    return Number((Number(getTotalSpending(expenses)) / getExpenseCount(expenses)).toFixed(2));
 }
 
 export { getExpenseCount, getTotalSpending, getLargestExpense, getCategoryTotals, getMonthlyTotals, getAverageExpense };
