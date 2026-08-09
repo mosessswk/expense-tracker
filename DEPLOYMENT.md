@@ -207,11 +207,14 @@ The database also enforces:
 
 ## Seed Data
 
-`02_seed.sql` inserts development/sample users and expenses.
+`02_seed.sql` inserts sample users and expenses :
 
-The seed file is only executed when PostgreSQL initialises a **new database volume**.
+* `user1` — `password1` (without sample expenses)
+* `user2` — `password2` (with sample expenses)
 
-Therefore, changing the seed file will not automatically change an existing database. To re-run the initialisation scripts:
+The seed file is only executed when PostgreSQL initialises a **new database volume**. Therefore, changing the seed file will not automatically change an existing database.
+
+To re-run the initialisation scripts:
 
 ```bash
 docker compose down -v
