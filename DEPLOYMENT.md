@@ -225,6 +225,12 @@ docker compose up --build
 
 # Testing
 
+Install `vitest`:
+
+```bash
+npm install vitest
+```
+
 Run the frontend test suite with:
 
 ```bash
