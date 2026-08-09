@@ -173,7 +173,7 @@ Other deployment-specific instructions are documented separately in:
 DEPLOYMENT.md
 ```
 
-Refer to `DEPLOTMENT.md` for the deployment configuration and production-related setup.
+Refer to `DEPLOYMENT.md` for the deployment configuration and production-related setup.
 
 ---
 
