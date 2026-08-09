@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict oQXq5xNY70WEwGdrqpLXqCMyvc75DxGoWdF4V9RVNqO5hTB4Svz171HDI9JpXhK
+\restrict 9Ya5IqzQv8HmTcmnMjQYf51cSjjRonzD0RYqfjspO3oisKWh3wYJ6c8fkoD3gdf
 
 -- Dumped from database version 18.4 (Homebrew)
 -- Dumped by pg_dump version 18.4 (Homebrew)
@@ -34,16 +34,16 @@ COPY public.users (id, username, password_hash, display_name) FROM stdin;
 --
 
 COPY public.expenses (id, title, amount, category, date, description, owner_id) FROM stdin;
-89	Breakfast	8.50	Food	2026-08-01	Coffee and toast	36
-90	MTR	12.00	Transport	2026-08-01	Home to work	36
 91	Lunch	65.00	Food	2026-08-02	Chicken rice	36
-92	Groceries	128.40	Other	2026-08-03	Weekly groceries	36
-93	MTR	12.00	Transport	2026-08-04	Work to home	36
-94	Dinner	92.00	Food	2026-08-04	Dinner with friends	36
-95	Movie	45.00	Entertainment	2026-08-05	Cinema ticket	36
-96	Coffee	16.00	Food	2026-08-06	\N	36
-97	Bus	13.70	Transportation	2026-08-07	Bus to home	36
-98	New Backpack	159.00	Shopping	2026-08-08	Daily-use backpack	36
+89	Breakfast	8.50	Food	2026-07-21	Coffee and toast	36
+90	MTR	12.00	Transport	2026-07-30	Home to work	36
+93	MTR	12.00	Transport	2026-08-13	Work to home	36
+94	Dinner	92.00	Food	2026-08-17	Dinner with friends	36
+95	Movie	45.00	Entertainment	2026-08-26	Cinema ticket	36
+96	Coffee	16.00	Food	2026-08-31	\N	36
+98	New Backpack	159.00	Shopping	2026-09-07	\N	36
+92	Groceries	128.40	Shopping	2026-08-03	\N	36
+97	Bus	13.70	Transport	2026-09-01	\N	36
 \.
 
 
@@ -65,5 +65,5 @@ SELECT pg_catalog.setval('public.users_id_seq', 36, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict oQXq5xNY70WEwGdrqpLXqCMyvc75DxGoWdF4V9RVNqO5hTB4Svz171HDI9JpXhK
+\unrestrict 9Ya5IqzQv8HmTcmnMjQYf51cSjjRonzD0RYqfjspO3oisKWh3wYJ6c8fkoD3gdf
 
