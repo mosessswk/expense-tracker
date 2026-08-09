@@ -135,7 +135,7 @@ PORT=3000
 SESSION_SECRET="secret"
 ```
 
-> Do not commit `.env` files containing real credentials.
+> **Warning:** Do not commit `.env` files containing real credentials.
 
 ### 3. Start the application
 
@@ -165,7 +165,7 @@ To also remove the PostgreSQL volume for initialising the database from scratch:
 docker compose down -v
 ```
 
-**Warning:** removing the volume deletes the all PostgreSQL data stored in the Docker volume.
+> **Warning:** removing the volume deletes the all PostgreSQL data stored in the Docker volume.
 
 Other deployment-specific instructions are documented separately in:
 
