@@ -173,14 +173,24 @@ Other deployment-specific instructions are documented separately in:
 DEPLOYMENT.md
 ```
 
-Refer to that document for the deployment configuration and production-related setup.
+Refer to `DEPLOTMENT.md` for the deployment configuration and production-related setup.
+
+---
+
+## Demonstration
+
+https://github.com/user-attachments/assets/f486da8b-cb8d-44af-92aa-e21d78f911a2
+
+### Sample Users :
+* `user1` — `password1` (without sample expenses)
+* `user2` — `password2` (with sample expenses)
 
 ---
 
 ## Known Limitations / Current State
 
 * Automated tests have not yet been implemented in the backend and in some places in the frontend.
-* The database seed file currently contains development/sample data.
+* The database seed file currently contains sample data.
 * Tailwind CSS is only partially implemented across the frontend.
 
 ---
